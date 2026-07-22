@@ -14,7 +14,6 @@ EcoLearner is a gamified environmental education platform designed for schools a
 
 ### Features
 
-- AI Lesson Generator
 - Mission Based Learning
 - Quiz System
 - Escape Room
