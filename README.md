@@ -1,2 +1,24 @@
 # EcoLearner
-A gamified environmental education platform for schools and colleges developed for Smart India Hackathon (SIH).
+
+## Smart India Hackathon Project
+
+EcoLearner is a gamified environmental education platform designed for schools and colleges.
+
+### Technology Stack
+
+- HTML
+- CSS
+- JavaScript
+- Python (Flask)
+- SQLite
+
+### Features
+
+- AI Lesson Generator
+- Mission Based Learning
+- Quiz System
+- Escape Room
+- Daily Streak
+- Badges
+- Leaderboard
+- Boss Battle
