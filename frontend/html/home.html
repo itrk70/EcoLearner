@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+</head>
+<body>
+
+    <!-- Target placeholder element where the component will load -->
+    <div id="navbar-placeholder"></div>
+
+    <main>
+        <h2>Welcome to the Home Page</h2>
+    </main>
+
+    <!-- Script to load the external component -->
+    <script>
+        fetch('index.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

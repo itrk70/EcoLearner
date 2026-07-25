@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLearner - Navbar Test</title>
+
+  <!-- global.css loads FIRST so its variables are ready for navbar.css to use -->
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+</head>
+<body>
+
+  <!-- ======================= NAVBAR ======================= -->
+  <header class="navbar">
+    <button class="navbar__menu-btn" id="menuToggle" aria-label="Open menu">
+      <img src="../assets/icons/nav/menu.svg" alt="" class="icon" />
+    </button>
+
+    <div class="navbar__right">
+      <div class="navbar__xp">
+        <img src="../assets/icons/ui/star.svg" alt="" class="icon" />
+        <span>120 XP</span>
+      </div>
+
+      <!-- The badge below is hidden by default (see navbar.css .navbar__badge).
+           To show a notification count, add class="navbar__badge is-active"
+           and put the count inside the <span>. -->
+      <button class="navbar__bell" aria-label="Notifications">
+        <img src="../assets/icons/ui/bell.svg" alt="" class="icon" />
+        <span class="navbar__badge">3</span>
+      </button>
+
+      <img src="../assets/images/avatars/avatar-default.svg" alt="Profile picture" class="navbar__avatar" />
+    </div>
+  </header>
+
+  <!-- ======================= PAGE PLACEHOLDER CONTENT ======================= -->
+  <!-- NOT part of the navbar component - this is only here so this test file
+       has something to scroll/look at below the navbar. The real Home Page
+       (with the "Hello, Aarav!" greeting, XP bar, etc.) will be built as its
+       own separate page later and will just re-use this same navbar markup. -->
+  <main style="padding: 24px;">
+    <p style="color: var(--color-text-muted);">
+      This is a test page for the navbar component only. Click the hamburger icon top-left to open the menu.
+    </p>
+  </main>
+
+  <!-- ======================= DARK OVERLAY (shown behind open menu) ======================= -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ======================= SIDE MENU ======================= -->
+  <nav class="side-menu" id="sideMenu">
+
+    <!-- Decorative leafy illustration - purely visual, sits behind the content below -->
+    <img
+      src="../assets/images/illustrations/menu-bottom-bg.png"
+      alt=""
+      class="side-menu__bg-decoration"
+    />
+
+    <!-- Wrapper holds all real menu content, stacked above the decoration image -->
+    <div class="side-menu__content">
+
+    <button class="side-menu__close" id="menuClose" aria-label="Close menu">
+      <img src="../assets/icons/nav/close.svg" alt="" class="icon" />
+    </button>
+
+    <h2 class="side-menu__heading">Menu</h2>
+    <p class="side-menu__tagline">Learn Today, Protect Tomorrow</p>
+
+    <ul class="side-menu__list">
+      <li>
+        <a href="index.html" class="side-menu__item is-current">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/nav/home.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">Home</div>
+            <div class="side-menu__item-subtitle">Go to homepage</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="about.html" class="side-menu__item">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/ui/info.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">About</div>
+            <div class="side-menu__item-subtitle">Learn more about the game</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="how-to-play.html" class="side-menu__item">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/nav/play.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">How to Play</div>
+            <div class="side-menu__item-subtitle">Learn how to play the game</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="leaderboard.html" class="side-menu__item">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/nav/leaderboard.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">Leaderboard</div>
+            <div class="side-menu__item-subtitle">See top players</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="settings.html" class="side-menu__item">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/ui/settings.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">Settings</div>
+            <div class="side-menu__item-subtitle">Customize your experience</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="login.html" class="side-menu__item">
+          <span class="side-menu__item-icon">
+            <img src="../assets/icons/ui/lock.svg" alt="" class="icon" />
+          </span>
+          <span class="side-menu__item-text">
+            <div class="side-menu__item-title">Login / Sign Up</div>
+            <div class="side-menu__item-subtitle">Access your account</div>
+          </span>
+          <span class="side-menu__item-arrow">&rsaquo;</span>
+        </a>
+      </li>
+    </ul>
+
+    </div><!-- /.side-menu__content -->
+  </nav>
+
+  <!-- JS loads at the end of body so it runs after the HTML elements above already exist -->
+  <script src="../js/navbar.js"></script>
+</body>
+</html>
