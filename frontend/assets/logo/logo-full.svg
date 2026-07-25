@@ -1,8 +1,0 @@
-<svg viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(5,5)">
-    <circle cx="38" cy="40" r="30" fill="#2E7D32"/>
-    <path d="M14 30 Q26 14 42 18 Q54 22 60 36 Q50 34 42 42 Q34 50 22 46 Q12 42 14 30 Z" fill="#66BB6A"/>
-    <path d="M32 8 C24 8 19 14 19 14 C19 14 25 11 32 12.5 C39 11 45 14 45 14 C45 14 40 8 32 8 Z" fill="#388E3C" transform="translate(6,0)"/>
-  </g>
-  <text x="85" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="34" font-weight="700" fill="#1B5E20">Eco<tspan fill="#66BB6A">Learner</tspan></text>
-</svg>
