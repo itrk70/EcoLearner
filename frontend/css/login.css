@@ -150,13 +150,24 @@
   color: var(--color-text-muted);
 }
 
+/* Row holding "Back" (left) and "Forgot Password?" (right) side by side */
+.login-form__links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
 .forgot-link {
-  display: block;
-  text-align: right;
   font-size: 13px;
   font-weight: 600;
   color: var(--color-primary);
-  margin-bottom: var(--space-lg);
+}
+
+.back-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
 }
 
 /* Small helper text explaining password rules, shown under the password field */
