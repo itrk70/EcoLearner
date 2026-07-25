@@ -8,6 +8,19 @@ const passwordInput = document.getElementById("passwordInput");
 const togglePasswordBtn = document.getElementById("togglePassword");
 const passwordHint = document.getElementById("passwordHint");
 const loginForm = document.getElementById("loginForm");
+const backLink = document.getElementById("backLink");
+
+// ---------- Back button ----------
+// Sends the user back to whichever page they actually came from
+// (e.g. About, Home, Quiz...) instead of a hardcoded page like Home.
+// This works because the browser already remembers the page the user
+// was on right before this one - we're just asking it to go back one step.
+if (backLink) {
+  backLink.addEventListener("click", (event) => {
+    event.preventDefault(); // stop the "#" in the href from jumping the page
+    window.history.back();
+  });
+}
 
 // The original hint text, saved so we can restore it after showing an error
 const defaultHintText = passwordHint ? passwordHint.textContent : "";
