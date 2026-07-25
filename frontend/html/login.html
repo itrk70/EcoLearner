@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLearner - Login</title>
+
+  <!-- global.css loads FIRST so its variables are ready for login.css to use -->
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+
+  <div class="login-page">
+
+    <!-- ======================= DECORATIVE CORNER LEAVES ======================= -->
+    <img src="../assets/images/illustrations/leaf-left.png" alt="" class="login-page__leaf login-page__leaf--left" />
+    <img src="../assets/images/illustrations/leaf-right.png" alt="" class="login-page__leaf login-page__leaf--right" />
+
+    <!-- ======================= HERO: BACKGROUND IMAGE + LOGO ======================= -->
+    <div class="login-hero">
+      <img
+        src="../assets/images/illustrations/login-page-background.png"
+        alt="Students learning about the environment"
+        class="login-hero__bg"
+      />
+
+      <div class="login-hero__logo">
+        <img src="../assets/logo/logo-icon.svg" alt="" class="login-hero__globe-icon" />
+        <h1 class="login-hero__title">Eco<span>Learn</span></h1>
+        <div class="login-hero__pill">🌿 Environmental Studies</div>
+        <p class="login-hero__tagline">Learn Today, <span>Protect Tomorrow</span></p>
+      </div>
+    </div>
+
+    <!-- ======================= LOGIN FORM CARD ======================= -->
+    <div class="login-card">
+      <h2 class="login-card__heading">Welcome Back! 🌱</h2>
+      <p class="login-card__subtext">Login to continue your eco learning adventure</p>
+
+      <form id="loginForm">
+        <!-- Email or Username field -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/person.svg" alt="" class="icon" />
+          <input type="text" placeholder="Email or Username" required />
+        </div>
+
+        <!-- Password field with show/hide toggle -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/lock.svg" alt="" class="icon" />
+          <input
+            type="password"
+            id="passwordInput"
+            placeholder="Password"
+            required
+            minlength="8"
+            maxlength="20"
+          />
+          <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+            <img src="../assets/icons/ui/eye.svg" alt="" class="icon" />
+          </button>
+        </div>
+        <p class="input-hint" id="passwordHint">
+          8-20 characters, with uppercase, lowercase, a number & a special character.
+        </p>
+
+        <a href="#" class="forgot-link">Forgot Password?</a>
+
+        <button type="submit" class="btn-primary">Login</button>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <!-- These two buttons are visual only for now - see chat notes on OAuth setup -->
+        <div class="social-buttons">
+          <button type="button" class="btn-social">
+            <img src="../assets/icons/social/google.svg" alt="" class="icon" />
+            Continue with Google
+          </button>
+          <button type="button" class="btn-social">
+            <img src="../assets/icons/social/microsoft.svg" alt="" class="icon" />
+            Continue with Microsoft
+          </button>
+        </div>
+
+        <p class="signup-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="../js/login.js"></script>
+</body>
+</html>
