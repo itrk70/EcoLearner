@@ -1,0 +1,309 @@
+/* ==========================================================================
+   SIGNUP.CSS
+   Structurally the same pattern as login.css (hero image + overlaid logo,
+   white form card, corner leaves) - styles are duplicated here rather than
+   shared from login.css so each page stays fully independent. If this
+   duplication becomes annoying later, these shared bits (input-group,
+   buttons, divider, social buttons, leaves) could be pulled into a
+   shared "auth.css" - not needed for now though.
+   ========================================================================== */
+
+.signup-page {
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-white);
+  min-height: 100vh;
+}
+
+/* -------------------- HERO SECTION (background image + logo) -------------------- */
+
+.signup-hero {
+  position: relative;
+}
+
+.signup-hero__bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.signup-hero__logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg) 0;
+  text-align: center;
+}
+
+.signup-hero__globe-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-xs);
+}
+
+.signup-hero__title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-white);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.signup-hero__title span {
+  color: var(--color-primary-light);
+}
+
+.signup-hero__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+  margin-top: var(--space-xs);
+}
+
+.signup-hero__tagline {
+  margin-top: var(--space-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+}
+
+.signup-hero__tagline span {
+  color: var(--color-primary);
+}
+
+/* -------------------- FORM CARD -------------------- */
+
+.signup-card {
+  position: relative;
+  z-index: 2;
+  background: var(--color-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  margin-top: -28px;
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.signup-card__heading {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin-bottom: var(--space-xs);
+}
+
+.signup-card__subtext {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+/* -------------------- FORM INPUTS -------------------- */
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 12px var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.input-group .icon {
+  color: var(--color-primary);
+}
+
+.input-group input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--color-text-dark);
+}
+
+.input-group input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.toggle-password {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password .icon {
+  color: var(--color-text-muted);
+}
+
+/* Small helper text explaining password rules / showing errors */
+.input-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin: -8px 0 var(--space-md) var(--space-sm);
+}
+
+.input-hint.is-error {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* -------------------- BUTTONS -------------------- */
+
+.btn-primary {
+  width: 100%;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-lg);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.divider span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  background: var(--color-white);
+}
+
+.btn-social .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-social:hover {
+  background: var(--color-bg);
+}
+
+.login-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+.login-text a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* -------------------- CREATIVE "GO BACK" LINK -------------------- */
+/* Sits below the "Already have an account? Login" line, phrased as an
+   inviting nudge rather than a plain "Back" - matches the friendly,
+   encouraging tone of the rest of the app. */
+
+.explore-back-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: var(--space-md);
+}
+
+.explore-back-link:hover {
+  color: var(--color-primary);
+}
+
+/* -------------------- DECORATIVE CORNER LEAVES -------------------- */
+
+.signup-page__leaf {
+  position: absolute;
+  bottom: 0;
+  width: 110px;
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+}
+
+.signup-page__leaf--left {
+  left: 0;
+}
+
+.signup-page__leaf--right {
+  right: 0;
+}
+
+/* -------------------- RESPONSIVE: EXTRA-SMALL PHONES (up to 380px) -------------------- */
+@media (max-width: 380px) {
+  .signup-hero__logo {
+    padding-top: var(--space-lg);
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
+}
+
+/* -------------------- RESPONSIVE: TABLET (768px+) -------------------- */
+@media (min-width: 768px) {
+  .signup-page {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    min-height: auto;
+  }
+
+  .signup-page__leaf {
+    width: 130px;
+  }
+}
+
+/* -------------------- RESPONSIVE: DESKTOP (1024px+) -------------------- */
+@media (min-width: 1024px) {
+  body {
+    background: var(--color-primary-pale);
+  }
+}
