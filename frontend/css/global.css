@@ -16,6 +16,7 @@
 
   --color-accent-gold: #FBC02D;    /* stars, coins, streak highlights */
   --color-accent-blue: #42A5F5;    /* gems, info highlights */
+  --color-accent-purple: #8E24AA;  /* level indicators */
   --color-danger: #E53935;         /* notification badges, errors */
 
   --color-bg: #F7F9F6;             /* page background */
