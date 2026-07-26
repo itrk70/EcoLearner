@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLearner - Quiz Window (Test Harness)</title>
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/quiz.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       DEMO CONTROLS
+       These buttons exist ONLY on this test page, to prove the quiz
+       window works in every theme/mode combination. A real page
+       (like Home, for the Daily Quiz) would just call
+       openQuiz("popup", "environmental") directly from its own button,
+       instead of showing all these options.
+       ============================================================ -->
+  <div style="padding: 24px; max-width: 500px; margin: 0 auto;">
+    <h1 style="color: var(--color-primary-dark); margin-bottom: 8px;">Quiz Window - Test Harness</h1>
+    <p style="color: var(--color-text-muted); margin-bottom: 24px;">
+      Pick a theme and a display mode to test the reusable quiz window with 5 placeholder questions.
+    </p>
+
+    <h3 style="margin-bottom: 8px;">Popup mode</h3>
+    <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+      <button data-open-quiz data-mode="popup" data-theme="environmental" style="padding: 10px 16px; border-radius: 999px; background: #2E7D32; color: white; font-weight: 600;">Environmental</button>
+      <button data-open-quiz data-mode="popup" data-theme="forest" style="padding: 10px 16px; border-radius: 999px; background: #1B4D2E; color: white; font-weight: 600;">Forest</button>
+      <button data-open-quiz data-mode="popup" data-theme="ocean" style="padding: 10px 16px; border-radius: 999px; background: #0277BD; color: white; font-weight: 600;">Ocean</button>
+    </div>
+
+    <h3 style="margin-bottom: 8px;">Full-frame mode</h3>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button data-open-quiz data-mode="fullframe" data-theme="environmental" style="padding: 10px 16px; border-radius: 999px; background: #2E7D32; color: white; font-weight: 600;">Environmental</button>
+      <button data-open-quiz data-mode="fullframe" data-theme="forest" style="padding: 10px 16px; border-radius: 999px; background: #1B4D2E; color: white; font-weight: 600;">Forest</button>
+      <button data-open-quiz data-mode="fullframe" data-theme="ocean" style="padding: 10px 16px; border-radius: 999px; background: #0277BD; color: white; font-weight: 600;">Ocean</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       REUSABLE COMPONENT: QUIZ WINDOW
+       Everything from here down is the actual component. Copy this
+       whole block (overlay + quiz-window) into any page that needs
+       to launch a quiz, then call openQuiz(mode, theme) from a
+       button on that page.
+       ============================================================ -->
+
+  <div class="quiz-overlay" id="quizOverlay"></div>
+
+  <div class="quiz-window" id="quizWindow">
+    <div class="quiz-window__bg"></div>
+
+    <!-- This box scrolls (if needed). The background above it never does,
+         so it always covers the full window with no gaps, on any screen size. -->
+    <div class="quiz-window__content">
+      <div class="quiz-window__inner">
+
+        <!-- Top stats bar: close button stays left, stats group sits on the right -->
+        <div class="quiz-topbar">
+          <button class="quiz-topbar__back" id="quizCloseBtn" aria-label="Close quiz">
+            <img src="../assets/icons/nav/close.svg" alt="" class="icon" />
+          </button>
+
+          <div class="quiz-topbar__stats">
+            <div class="quiz-stat">
+              <img src="../assets/icons/ui/star.svg" alt="" class="icon quiz-stat__icon--xp" />
+              <span id="xpValue">0</span>
+            </div>
+
+            <div class="quiz-stat">
+              <img src="../assets/icons/ui/medal.svg" alt="" class="icon quiz-stat__icon--level" />
+              <span>Lvl <span id="levelValue">0</span></span>
+            </div>
+
+            <div class="quiz-stat">
+              <img src="../assets/icons/ui/coin.svg" alt="" class="icon quiz-stat__icon--coin" />
+              <span id="coinsValue">100</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress row -->
+        <div class="quiz-progress-row">
+          <button class="quiz-progress-row__skip" id="skipButton">
+            <img src="../assets/icons/ui/skip.svg" alt="" class="icon" />
+            Skip
+          </button>
+
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-bar__fill" id="progressFill"></div>
+          </div>
+
+          <span class="quiz-progress-row__counter" id="questionCounter">Question 1/5</span>
+
+          <div class="quiz-progress-row__reward">
+            <img src="../assets/icons/ui/star.svg" alt="" class="icon quiz-stat__icon--xp" />
+            <span id="rewardXP">+20 XP</span>
+          </div>
+        </div>
+
+        <!-- Everything below hides at once when the quiz is complete -->
+        <div id="quizCardSection">
+
+          <!-- ONE card holds the topic, question, image, options, submit button,
+               AND the hint bar together - so it reads as a single screen instead
+               of separate stacked boxes. -->
+          <div class="quiz-card">
+            <span class="quiz-card__topic" id="topicTag">General Knowledge</span>
+
+            <h2 class="quiz-card__question" id="questionText">Question text goes here</h2>
+
+            <!-- Hidden via JS (display:none) when a question has no image -->
+            <img src="" alt="" class="quiz-card__image" id="questionImage" style="display: none;" />
+
+            <!-- Option buttons are generated by quiz.js -> renderQuestion() -->
+            <div class="quiz-options" id="optionsList"></div>
+
+            <button class="quiz-submit" id="submitButton" disabled>Submit</button>
+
+            <div class="quiz-hint">
+              <div class="quiz-hint__icon-wrap">
+                <img src="../assets/icons/ui/lightbulb.svg" alt="" class="icon" />
+              </div>
+              <div class="quiz-hint__text">
+                <strong>Hint</strong>
+                <p id="hintText">Use a hint to reveal a clue for this question.</p>
+              </div>
+              <!-- Coin icon here (not the star/XP icon) so it's clear this
+                   costs coins, not XP -->
+              <button class="quiz-hint__button" id="hintButton">
+                Use Hint
+                <img src="../assets/icons/ui/coin.svg" alt="" class="icon" />
+                <span>20</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Score screen - hidden until the 5th question is answered/skipped -->
+        <div class="quiz-score" id="quizScore">
+          <div class="quiz-score__title">Quiz Complete! 🎉</div>
+          <div class="quiz-score__result">You scored <strong id="finalScore">0/5</strong></div>
+          <div class="quiz-score__xp">+<span id="finalXP">0</span> XP earned</div>
+          <button class="quiz-score__close" id="scoreCloseBtn">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       LEVEL-UP CELEBRATION MODAL
+       Shown briefly whenever the user's XP crosses into a new level.
+       Sits above everything else (even the quiz window) since it's
+       an interruption/celebration moment.
+       ============================================================ -->
+  <div class="levelup-overlay" id="levelUpOverlay">
+    <div class="levelup-card">
+      <img src="../assets/images/animations/levelup-star.gif" alt="" class="levelup-card__gif" />
+      <div class="levelup-card__title">Congratulations!</div>
+      <div class="levelup-card__level">Level <span id="levelUpNumber">1</span></div>
+      <p class="levelup-card__message">You've leveled up! Keep learning to unlock the next one.</p>
+      <button class="levelup-card__button" id="levelUpCloseBtn">Awesome!</button>
+    </div>
+  </div>
+  <!-- ============================================================
+       END REUSABLE COMPONENT
+       ============================================================ -->
+
+  <script src="../js/quiz.js"></script>
+</body>
+</html>
