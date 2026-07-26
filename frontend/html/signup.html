@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLearner - Sign Up</title>
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/signup.css" />
+</head>
+<body>
+
+  <div class="signup-page">
+
+    <!-- ======================= DECORATIVE CORNER LEAVES (same images as Login) ======================= -->
+    <img src="../assets/images/illustrations/leaf-left.png" alt="" class="signup-page__leaf signup-page__leaf--left" />
+    <img src="../assets/images/illustrations/leaf-right.png" alt="" class="signup-page__leaf signup-page__leaf--right" />
+
+    <!-- ======================= HERO: BACKGROUND IMAGE + LOGO ======================= -->
+    <div class="signup-hero">
+      <img
+        src="../assets/images/illustrations/signup-page-background.png"
+        alt="Forest, river, and city skyline landscape"
+        class="signup-hero__bg"
+      />
+
+      <div class="signup-hero__logo">
+        <img src="../assets/logo/logo-icon.svg" alt="" class="signup-hero__globe-icon" />
+        <h1 class="signup-hero__title">Eco<span>Learn</span></h1>
+        <div class="signup-hero__pill">🌿 Environmental Studies</div>
+        <p class="signup-hero__tagline">Learn Today, <span>Protect Tomorrow</span></p>
+      </div>
+    </div>
+
+    <!-- ======================= SIGNUP FORM CARD ======================= -->
+    <div class="signup-card">
+      <h2 class="signup-card__heading">Create Your Account 🌱</h2>
+      <p class="signup-card__subtext">Join EcoLearn and start your eco learning journey</p>
+
+      <form id="signupForm">
+        <!-- Full Name -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/person.svg" alt="" class="icon" />
+          <input type="text" placeholder="Full Name" required />
+        </div>
+
+        <!-- Username -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/person.svg" alt="" class="icon" />
+          <input type="text" placeholder="Username" required />
+        </div>
+
+        <!-- Email Address -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/mail.svg" alt="" class="icon" />
+          <input type="email" placeholder="Email Address" required />
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/lock.svg" alt="" class="icon" />
+          <input
+            type="password"
+            id="passwordInput"
+            placeholder="Password"
+            required
+            minlength="8"
+            maxlength="20"
+          />
+          <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+            <img src="../assets/icons/ui/eye.svg" alt="" class="icon" />
+          </button>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="input-group">
+          <img src="../assets/icons/ui/lock.svg" alt="" class="icon" />
+          <input
+            type="password"
+            id="confirmPasswordInput"
+            placeholder="Confirm Password"
+            required
+            minlength="8"
+            maxlength="20"
+          />
+          <button type="button" class="toggle-password" id="toggleConfirmPassword" aria-label="Show password">
+            <img src="../assets/icons/ui/eye.svg" alt="" class="icon" />
+          </button>
+        </div>
+
+        <p class="input-hint" id="passwordHint">
+          8-20 characters, with uppercase, lowercase, a number & a special character.
+        </p>
+
+        <button type="submit" class="btn-primary">Sign Up</button>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <!-- Visual only for now - see chat notes on OAuth setup -->
+        <div class="social-buttons">
+          <button type="button" class="btn-social">
+            <img src="../assets/icons/social/google.svg" alt="" class="icon" />
+            Continue with Google
+          </button>
+          <button type="button" class="btn-social">
+            <img src="../assets/icons/social/microsoft.svg" alt="" class="icon" />
+            Continue with Microsoft
+          </button>
+        </div>
+
+        <p class="login-text">Already have an account? <a href="login.html">Login</a></p>
+
+        <!-- Creative "go back" link instead of a plain "Back" - takes the
+             user to whichever page they actually came from (same
+             history.back() approach as the Login page). -->
+        <a href="#" id="exploreBackLink" class="explore-back-link">Still exploring? Head back &#127807;</a>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="../js/signup.js"></script>
+</body>
+</html>
