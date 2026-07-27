@@ -112,3 +112,13 @@ ul, ol {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
 }
+
+/* Forces an <img>-loaded icon to render pure white. Necessary because
+   icons are loaded via <img src="...svg">, not embedded directly in
+   the page - so CSS "color" can't reach the SVG's internal currentColor
+   the way it can with inline SVG. This filter trick works regardless
+   of what color the original SVG file uses. Used anywhere a white icon
+   needs to sit on a colored button/background. */
+.icon-white {
+  filter: brightness(0) invert(1);
+}
