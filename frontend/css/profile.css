@@ -1,0 +1,663 @@
+/* ==========================================================================
+   PROFILE.CSS
+   Unlike Login/Signup (which are capped phone-width), this page is a
+   full dashboard - it uses the available width and switches from a
+   single column (mobile) to a wider, two-column layout (tablet/desktop)
+   for the Achievements/Recent Activity section.
+   ========================================================================== */
+
+.profile-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+/* Overrides global.css's default body background just for this page,
+   so cards/sections (white) visibly stand out against it - same soft
+   green used behind the Login/Signup cards. */
+body {
+  background-color: var(--color-primary-pale);
+}
+
+/* -------------------- HEADER ROW -------------------- */
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  gap: var(--space-sm);
+}
+
+.profile-header__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.profile-header__back {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 50%;
+}
+
+.profile-header__back:hover {
+  background: var(--color-primary-dark);
+}
+
+.profile-header__title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-header__tagline {
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
+.profile-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.profile-coin-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-white);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-text-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-coin-pill .icon {
+  color: var(--color-accent-gold);
+}
+
+.profile-notif-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-notif-btn .icon {
+  color: var(--color-text-dark);
+}
+
+/* Hidden by default - shown (via .is-active) only once a real notification exists */
+.profile-notif-badge {
+  display: none;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--color-danger);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+.profile-notif-badge.is-active {
+  display: flex;
+}
+
+/* -------------------- BANNER CARD -------------------- */
+
+.profile-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-banner__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.profile-banner__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Avatar + edit button */
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid var(--color-white);
+  object-fit: cover;
+  background: var(--color-white);
+}
+
+.profile-avatar__edit-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+}
+
+.profile-avatar__edit-btn .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-white);
+}
+
+/* Info block: name, title, level, XP bar, country */
+.profile-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.profile-info__name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-info__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--space-sm);
+}
+
+.profile-badge-level-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* Latest-achievement badge slot */
+.profile-latest-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-latest-badge .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent-gold);
+}
+
+/* Level 0 state - empty dashed placeholder, no badge earned yet */
+.profile-latest-badge--empty {
+  background: #E0E0E0;
+  border: 2px dashed #ABABAB;
+  box-shadow: none;
+}
+
+.profile-level-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+}
+
+.profile-level-pill .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.profile-xp-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-bottom: 4px;
+}
+
+.profile-xp-bar {
+  width: 100%;
+  max-width: 280px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.profile-xp-bar__fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease;
+}
+
+.profile-country-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.profile-country-row .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary);
+}
+
+/* -------------------- STATS GRID -------------------- */
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.profile-stat-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-stat-card .icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.profile-stat-card__value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  display: block;
+}
+
+.profile-stat-card__label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* -------------------- ACHIEVEMENTS + RECENT ACTIVITY -------------------- */
+
+.profile-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.profile-panel {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.profile-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.profile-panel__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-panel__title .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary);
+}
+
+.profile-panel__view-all {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Achievement row */
+.achievement-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.achievement-row:last-child {
+  border-bottom: none;
+}
+
+.achievement-row__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-pale);
+}
+
+.achievement-row__icon .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary);
+}
+
+.achievement-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-row__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.achievement-row__subtitle {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.achievement-row__progress {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.achievement-row__progress.is-complete {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.achievement-row__progress .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Activity row */
+.activity-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-row__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-pale);
+}
+
+.activity-row__icon .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary);
+}
+
+.activity-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-row__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.activity-row__subtitle {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.activity-row__time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Empty state, shown when there's no real activity yet (e.g. brand new user) */
+.profile-empty-state {
+  text-align: center;
+  padding: var(--space-lg) var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.profile-empty-state .icon {
+  width: 32px;
+  height: 32px;
+  color: var(--color-border);
+  margin: 0 auto var(--space-sm);
+}
+
+/* -------------------- BOTTOM BANNER (with typing animation text) -------------------- */
+
+.profile-bottom-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 100px;
+  display: flex;
+  align-items: center; /* text centers vertically by default */
+  gap: var(--space-sm);
+}
+
+.profile-bottom-banner__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Flush against the left edge on purpose - no margin, no padding.
+   Height is set in px per breakpoint below (not %) so it scales
+   predictably and never eats into the text's space unexpectedly. */
+.profile-bottom-banner__hand {
+  position: relative;
+  z-index: 1;
+  height: 70px;
+  width: auto;
+  flex-shrink: 0; /* never gets squeezed by the text next to it */
+  display: block;
+  margin: 0;
+  align-self: flex-end; /* hand stays touching the bottom, independent of the text's centering */
+}
+
+.profile-bottom-banner__text {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--space-md) 0 0;
+  flex: 1;
+  min-width: 0; /* allows text to wrap/shrink instead of overflowing */
+}
+
+.profile-bottom-banner__heading {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  margin-bottom: 4px;
+  min-height: 1.3em; /* keeps layout stable while typing animation runs */
+}
+
+.profile-bottom-banner__subheading {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  min-height: 1.3em;
+}
+
+/* Blinking cursor effect while typing */
+.typing-cursor::after {
+  content: "|";
+  animation: fp-blink 0.8s step-end infinite;
+  color: var(--color-primary);
+}
+
+@keyframes fp-blink {
+  50% { opacity: 0; }
+}
+
+/* -------------------- RESPONSIVE: SMALL PHONES (up to 480px) -------------------- */
+@media (max-width: 480px) {
+  .profile-banner__content {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+/* -------------------- RESPONSIVE: 480px+ (larger phones / small tablets) -------------------- */
+@media (min-width: 480px) {
+  .profile-header__title {
+    font-size: 19px;
+  }
+
+  .profile-header__tagline {
+    font-size: 10px;
+  }
+
+  .profile-bottom-banner {
+    min-height: 130px;
+  }
+
+  .profile-bottom-banner__hand {
+    height: 95px;
+  }
+
+  .profile-bottom-banner__heading {
+    font-size: 15px;
+  }
+
+  .profile-bottom-banner__subheading {
+    font-size: 12px;
+  }
+}
+
+/* -------------------- RESPONSIVE: TABLET+ (768px) -------------------- */
+@media (min-width: 768px) {
+  .profile-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .profile-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .profile-header__title {
+    font-size: 22px;
+  }
+
+  .profile-header__tagline {
+    font-size: 12px;
+  }
+
+  .profile-bottom-banner {
+    min-height: 160px;
+  }
+
+  .profile-bottom-banner__hand {
+    height: 130px;
+  }
+
+  .profile-bottom-banner__heading {
+    font-size: 18px;
+  }
+
+  .profile-bottom-banner__subheading {
+    font-size: 13px;
+  }
+}
