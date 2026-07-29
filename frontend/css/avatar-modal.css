@@ -1,0 +1,226 @@
+/* ==========================================================================
+   AVATAR-MODAL.CSS
+   Centered modal (unlike the notification popover) for picking a profile
+   avatar from a fixed set of pre-given/unlocked avatars. Closes ONLY via
+   the X button - clicking the dimmed background does nothing on purpose.
+   ========================================================================== */
+
+/* -------------------- OVERLAY -------------------- */
+
+.avatar-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+.avatar-modal-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* -------------------- MODAL CARD -------------------- */
+
+.avatar-modal {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+
+  /* Small pop-in so it doesn't just snap into place */
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+}
+
+.avatar-modal-overlay.is-active .avatar-modal {
+  transform: scale(1);
+}
+
+/* Thin themed scrollbar, same treatment as the notification popover */
+.avatar-modal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light) var(--color-primary-pale);
+}
+
+.avatar-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.avatar-modal::-webkit-scrollbar-track {
+  background: var(--color-primary-pale);
+  border-radius: var(--radius-pill);
+}
+
+.avatar-modal::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-pill);
+}
+
+/* -------------------- CLOSE BUTTON -------------------- */
+
+.avatar-modal__close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  border-radius: 50%;
+}
+
+.avatar-modal__close:hover {
+  background: var(--color-primary-pale);
+}
+
+.avatar-modal__close .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-dark);
+}
+
+/* -------------------- HEADER -------------------- */
+
+.avatar-modal__title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  margin-bottom: 4px;
+  padding-right: var(--space-xl); /* keeps title from running under the close button */
+}
+
+.avatar-modal__subtext {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* -------------------- AVATAR GRID -------------------- */
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+/* Each option is a real <button> (not just a styled <img>) so it's
+   keyboard-accessible and screen readers announce it correctly. */
+.avatar-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.avatar-option__img-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+/* All avatars MUST render as circles, no exceptions - enforced here at
+   the CSS level rather than relying on the source images already
+   being cropped round. */
+.avatar-option__img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-border);
+  transition: border-color 0.15s ease;
+}
+
+.avatar-option:hover .avatar-option__img {
+  border-color: var(--color-primary-light);
+}
+
+/* Highlighted state - shown on whichever avatar is currently picked
+   (starts on the active profile avatar when the modal opens, moves
+   to whatever the user taps next - not saved until they hit Save). */
+.avatar-option.is-selected .avatar-option__img {
+  border-color: var(--color-primary);
+}
+
+/* Checkmark badge, only shown on the selected avatar */
+.avatar-option__check {
+  display: none;
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-white);
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-option.is-selected .avatar-option__check {
+  display: flex;
+}
+
+.avatar-option__check .icon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-white);
+}
+
+.avatar-option__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* -------------------- SAVE BUTTON -------------------- */
+
+.avatar-modal__save-btn {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-white);
+  text-align: center;
+  transition: background 0.15s ease;
+}
+
+/* Disabled state (no new selection yet) - gray, not clickable */
+.avatar-modal__save-btn:disabled {
+  background: #C4CAC2;
+  cursor: not-allowed;
+}
+
+/* Enabled state (a different avatar has been tapped) - theme green */
+.avatar-modal__save-btn:not(:disabled) {
+  background: var(--color-primary);
+  cursor: pointer;
+}
+
+.avatar-modal__save-btn:not(:disabled):hover {
+  background: var(--color-primary-dark);
+}
+
+/* -------------------- RESPONSIVE: SMALL PHONES -------------------- */
+@media (max-width: 360px) {
+  .avatar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
