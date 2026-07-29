@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/profile.css" />
   <link rel="stylesheet" href="../css/notifications.css" />
+  <link rel="stylesheet" href="../css/avatar-modal.css" />
 </head>
 <body>
 
@@ -67,7 +68,7 @@
 
       <div class="profile-banner__content">
         <div class="profile-avatar-wrap">
-          <img src="../assets/images/avatars/avatar-default.svg" alt="Profile picture" class="profile-avatar" />
+          <img src="../assets/images/avatars/avatar-default.svg" alt="Profile picture" class="profile-avatar" id="profileAvatarImg" />
           <button class="profile-avatar__edit-btn" id="editAvatarBtn" aria-label="Change profile picture">
             <img src="../assets/icons/ui/pencil.svg" alt="" class="icon icon-white" />
           </button>
@@ -171,9 +172,33 @@
 
   </div>
 
+  <!-- ======================= AVATAR SELECTION MODAL =======================
+       Centered modal, opened by the pencil icon on the avatar above.
+       Unlike the notification popover, this does NOT close on outside
+       click - only via the X button, or automatically after Save.
+       Built + controlled by avatar-modal.js.
+  ========================================================================== -->
+  <div class="avatar-modal-overlay" id="avatarModalOverlay">
+    <div class="avatar-modal">
+      <button class="avatar-modal__close" id="avatarModalClose" aria-label="Close">
+        <img src="../assets/icons/nav/close.svg" alt="" class="icon" />
+      </button>
+
+      <div class="avatar-modal__title">Choose Your Avatar</div>
+      <p class="avatar-modal__subtext">Pick from your available avatars. Earn more by completing challenges!</p>
+
+      <div class="avatar-grid" id="avatarGrid">
+        <!-- Filled by avatar-modal.js -->
+      </div>
+
+      <button type="button" class="avatar-modal__save-btn" id="avatarSaveBtn" disabled>Save</button>
+    </div>
+  </div>
+
   <!-- levels.js MUST load before profile.js - profile.js uses its functions -->
   <script src="../js/levels.js"></script>
   <script src="../js/profile.js"></script>
   <script src="../js/notifications.js"></script>
+  <script src="../js/avatar-modal.js"></script>
 </body>
 </html>
