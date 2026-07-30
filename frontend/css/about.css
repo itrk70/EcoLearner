@@ -1,0 +1,316 @@
+/* ==========================================================================
+   ABOUT.CSS
+   Informational "about this app" page - styled like a mobile settings/
+   about screen rather than a marketing landing page. No navbar; uses
+   its own top header stripe with just a back button.
+   ========================================================================== */
+
+/* -------------------- HEADER STRIPE -------------------- */
+/* Same gradient as navbar.css (not a flat solid) so this page reads as
+   part of the same app, not a different shade of green. */
+
+.about-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-lg);
+  background: linear-gradient(180deg, var(--color-primary-dark), var(--color-primary));
+}
+
+.about-header__back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease;
+}
+
+.about-header__back:hover {
+  transform: scale(1.08);
+}
+
+.about-header__back:active {
+  transform: scale(0.94);
+}
+
+.about-header__back .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* -------------------- PAGE CONTAINER -------------------- */
+
+.about-page {
+  background: var(--color-white);
+}
+
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+/* -------------------- ON-LOAD ANIMATIONS -------------------- */
+/* Whole page fades in, each section also slides up slightly with a
+   small stagger - all handled in CSS, no scroll-driven JS needed since
+   this only happens once on load. */
+
+.about-content {
+  animation: about-fade-in 0.4s ease both;
+}
+
+.about-section {
+  animation: about-slide-up 0.45s ease both;
+}
+
+.about-section:nth-of-type(1) {
+  animation-delay: 0.05s;
+}
+
+.about-section:nth-of-type(2) {
+  animation-delay: 0.1s;
+}
+
+.about-section:nth-of-type(3) {
+  animation-delay: 0.15s;
+}
+
+.about-section:nth-of-type(4) {
+  animation-delay: 0.2s;
+}
+
+.about-section:nth-of-type(5) {
+  animation-delay: 0.25s;
+}
+
+.about-section:nth-of-type(6) {
+  animation-delay: 0.3s;
+}
+
+@keyframes about-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes about-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------- SECTION 1: HEADING + INTRO -------------------- */
+
+.about-section {
+  margin-bottom: var(--space-lg);
+}
+
+.about-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.about-title__underline {
+  width: 48px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-light);
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+/* Small dot decoration right after the underline, matching the mockup */
+.about-title__underline::after {
+  content: "";
+  position: absolute;
+  left: 58px;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+}
+
+.about-paragraph {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-dark);
+}
+
+/* -------------------- MISSION / VISION / WHY (horizontal icon rows) -------------------- */
+
+.about-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.about-row__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.about-row__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 4px;
+}
+
+.about-row__text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-dark);
+}
+
+/* -------------------- DIVIDER -------------------- */
+
+.about-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-lg) 0;
+}
+
+/* -------------------- "WHAT YOU CAN DO HERE" BLOCKS -------------------- */
+
+.about-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* per spec: exact 20px spacing between items */
+}
+
+.about-block {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.about-block__icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary-pale);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.about-block:hover .about-block__icon-wrap {
+  transform: scale(1.06);
+}
+
+.about-block__icon {
+  width: 24px;
+  height: 24px;
+  /* Recolors a black/white source icon to the theme green. Skip this
+     filter if the icon file is already colored (like the ones currently
+     in use) - only needed if a plain black icon gets swapped in later. */
+}
+
+.about-icon-filtered {
+  transition: filter 0.2s ease-in-out;
+  filter: brightness(0) saturate(100%) invert(44%) sepia(30%) saturate(1212%) hue-rotate(63deg) brightness(94%) contrast(85%);
+}
+
+/* .about-block__icon--tint {
+  filter: brightness(0) saturate(100%) invert(49%) sepia(35%) saturate(913%) hue-rotate(58deg) brightness(91%) contrast(92%) opacity(70%);
+} */
+
+.about-block__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: 2px;
+}
+
+.about-block__text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-dark);
+}
+
+/* -------------------- BOTTOM INSPIRATION CARD -------------------- */
+
+.about-inspire-card {
+  width: 100%;
+  border-radius: 18px;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--color-primary-pale), #F3FAF0);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.about-inspire-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.about-inspire-card__illustration {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.about-inspire-card__quote {
+  font-size: 18px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--color-primary-dark);
+  margin-bottom: 6px;
+}
+
+.about-inspire-card__line {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.about-inspire-card__line--accent {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+
+@media (min-width: 768px) {
+  .about-content {
+    padding: var(--space-xl);
+  }
+
+  .about-title {
+    font-size: 36px;
+  }
+}
+
+/* Reduced motion: respect the user's OS setting and skip animations */
+@media (prefers-reduced-motion: reduce) {
+
+  .about-content,
+  .about-section {
+    animation: none;
+  }
+}
