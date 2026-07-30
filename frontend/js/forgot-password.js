@@ -3,20 +3,16 @@
    Drives the 4-step Forgot Password modal: Email -> OTP -> New Password
    -> Success, plus the "incorrect OTP" error state.
 
-   IMPORTANT: everything that checks "does this email exist" or "is this
-   OTP correct" is a FRONTEND SIMULATION ONLY. There is no real backend
-   yet, so this file fakes those checks just so the interface behaves
-   the right way. Every simulated bit is clearly marked below - search
-   for "TODO" when the real Flask backend exists.
+   Now calls the REAL backend routes (send-otp / verify-otp / reset)
+   instead of faking the OTP in the browser. Unlike earlier placeholder
+   files, this one does NOT fall back to a fake local simulation if the
+   backend isn't reachable - faking password-reset security defeats the
+   whole point of fixing this. If the fetch fails, the user just sees a
+   clear "couldn't reach the server" message and stays on the same step.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   FAKE "DATABASE" - stand-in until Flask + SQLite exist.
-   Only this one email will be treated as "registered" for testing.
-   -------------------------------------------------------------------------- */
-const FAKE_REGISTERED_EMAILS = ["john.doe@email.com", "test@ecolearner.com"];
-
-let generatedOTP = null; // the "correct" OTP for this session (frontend-only)
+let currentResetEmail = null; // carried across steps 1 -> 2 -> 3
+let verifiedOtp = null; // set once step 2 succeeds, sent again in step 3 so the backend can double-check it
 let resendSecondsLeft = 25;
 let resendTimerId = null;
 
@@ -72,6 +68,8 @@ function goToStep(stepNumber) {
 }
 
 function resetForgotPasswordState() {
+  currentResetEmail = null;
+  verifiedOtp = null;
   fpEmailInput.value = "";
   fpEmailError.classList.remove("is-active");
   fpOtpBoxes.forEach((box) => {
@@ -95,56 +93,83 @@ if (fpOpenTrigger) fpOpenTrigger.addEventListener("click", (e) => {
 
 document.querySelectorAll(".fp-close").forEach((btn) => btn.addEventListener("click", closeForgotPassword));
 // NOTE: clicking the dark backdrop intentionally does NOT close this modal.
-// Unlike simpler popups (like the level-up modal), this is a multi-step
-// form - an accidental outside click here would force the user to redo
-// the entire email -> OTP -> new password flow. Only the X button (all
-// steps) or "Go to Login" (final step) should close it.
+// This is a multi-step form - an accidental outside click would force the
+// user to redo the entire email -> OTP -> new password flow.
 
 document.getElementById("fpBackStep2").addEventListener("click", () => goToStep(1));
 document.getElementById("fpBackStep3").addEventListener("click", () => goToStep(2));
 
 /* --------------------------------------------------------------------------
    STEP 1: EMAIL
-   TODO: replace this with a real fetch() to Flask, e.g.
-     const res = await fetch("/api/check-email", { method: "POST", body: ... });
-   which checks the Users table for a matching email.
    -------------------------------------------------------------------------- */
-fpSendOtpBtn.addEventListener("click", () => {
+fpSendOtpBtn.addEventListener("click", async () => {
   const email = fpEmailInput.value.trim().toLowerCase();
-
-  if (!FAKE_REGISTERED_EMAILS.includes(email)) {
-    fpEmailError.textContent = "No account exists with this email address.";
-    fpEmailError.classList.add("is-active");
-    return;
-  }
+  if (!email) return;
 
   fpEmailError.classList.remove("is-active");
-  fpEmailDisplay.textContent = email;
 
-  sendNewOTP();
-  goToStep(2);
+  const sent = await requestOtp(email, /* isResend */ false);
+  if (sent) {
+    currentResetEmail = email;
+    fpEmailDisplay.textContent = email;
+    goToStep(2);
+  }
 });
 
 /* --------------------------------------------------------------------------
    STEP 2: OTP
    -------------------------------------------------------------------------- */
 
-// Generates a fake 6-digit OTP and "sends" it (really just logs it to the
-// console, since there's no real email service yet).
-function sendNewOTP() {
-  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
-  console.log("[DEV ONLY - remove once real email sending exists] OTP is:", generatedOTP);
+// ------------------------------------------------------------------
+// BACKEND CONTRACT - POST /forgot-password/send-otp
+// Request:  { "email": "..." }
+// Response success: { "success": true, "message": "OTP sent" }
+// Response failure: { "success": false, "message": "No account exists with this email address." }
+// ------------------------------------------------------------------
+async function requestOtp(email, isResend) {
+  try {
+    const response = await fetch("/forgot-password/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const result = await response.json();
 
-  fpOtpBoxes.forEach((box) => {
-    box.value = "";
-    box.type = "text";
-    box.classList.remove("is-invalid");
-  });
-  fpOtpNormalBlock.classList.add("is-active");
-  fpOtpErrorBlock.classList.remove("is-active");
-  fpOtpBoxes[0].focus();
+    if (!result.success) {
+      if (isResend) {
+        alert(result.message || "Could not resend the code. Please try again.");
+      } else {
+        fpEmailError.textContent = result.message || "No account exists with this email address.";
+        fpEmailError.classList.add("is-active");
+      }
+      return false;
+    }
 
-  startResendCountdown();
+    // Reset the OTP boxes to a fresh, empty entry state
+    fpOtpBoxes.forEach((box) => {
+      box.value = "";
+      box.type = "text";
+      box.classList.remove("is-invalid");
+    });
+    fpOtpNormalBlock.classList.add("is-active");
+    fpOtpErrorBlock.classList.remove("is-active");
+    fpOtpBoxes[0].focus();
+
+    startResendCountdown();
+    return true;
+  } catch (error) {
+    // Real error (backend not running, network issue) - deliberately
+    // NOT faked here, since faking OTP delivery would defeat the point
+    // of connecting this to a real backend in the first place.
+    console.log("Could not reach the server.", error);
+    if (isResend) {
+      alert("Could not reach the server. Please try again in a moment.");
+    } else {
+      fpEmailError.textContent = "Could not reach the server. Please try again in a moment.";
+      fpEmailError.classList.add("is-active");
+    }
+    return false;
+  }
 }
 
 // Auto-advance to the next box as the user types, and move back on backspace
@@ -188,37 +213,59 @@ function updateResendCountdownText() {
 
 fpResendBtn.addEventListener("click", () => {
   if (fpResendBtn.disabled) return;
-  sendNewOTP();
+  requestOtp(currentResetEmail, /* isResend */ true);
 });
 
-fpResendBtnError.addEventListener("click", sendNewOTP);
+fpResendBtnError.addEventListener("click", () => {
+  requestOtp(currentResetEmail, /* isResend */ true);
+});
 
 fpGoBackChangeEmail.addEventListener("click", (e) => {
   e.preventDefault();
   goToStep(1);
 });
 
-// TODO: replace this with a real fetch() to Flask that checks the OTP
-// the backend actually sent, rather than comparing to a frontend variable.
-fpVerifyOtpBtn.addEventListener("click", () => {
+// ------------------------------------------------------------------
+// BACKEND CONTRACT - POST /forgot-password/verify-otp
+// Request:  { "email": "...", "otp": "123456" }
+// Response success: { "success": true }
+// Response failure: { "success": false, "message": "Invalid or expired OTP." }
+// ------------------------------------------------------------------
+fpVerifyOtpBtn.addEventListener("click", async () => {
   const enteredOTP = Array.from(fpOtpBoxes).map((box) => box.value).join("");
-
   if (enteredOTP.length < 6) return; // incomplete, don't submit yet
 
-  if (enteredOTP === generatedOTP) {
-    goToStep(3);
-  } else {
-    // Show the "incorrect OTP" state: mask entered digits as dots,
-    // highlight the boxes red, and swap the footer to the error version.
-    fpOtpBoxes.forEach((box) => {
-      box.type = "password";
-      box.classList.add("is-invalid");
+  try {
+    const response = await fetch("/forgot-password/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: currentResetEmail, otp: enteredOTP }),
     });
-    fpOtpNormalBlock.classList.remove("is-active");
-    fpOtpErrorBlock.classList.add("is-active");
-    clearInterval(resendTimerId);
+    const result = await response.json();
+
+    if (result.success) {
+      verifiedOtp = enteredOTP;
+      goToStep(3);
+    } else {
+      showIncorrectOtpState();
+    }
+  } catch (error) {
+    console.log("Could not reach the server.", error);
+    alert("Could not reach the server. Please try again in a moment.");
   }
 });
+
+function showIncorrectOtpState() {
+  // Mask entered digits as dots, highlight the boxes red, and swap the
+  // footer to the error version (matches the "Incorrect OTP" mockup).
+  fpOtpBoxes.forEach((box) => {
+    box.type = "password";
+    box.classList.add("is-invalid");
+  });
+  fpOtpNormalBlock.classList.remove("is-active");
+  fpOtpErrorBlock.classList.add("is-active");
+  clearInterval(resendTimerId);
+}
 
 /* --------------------------------------------------------------------------
    STEP 3: NEW PASSWORD
@@ -252,7 +299,16 @@ function updatePasswordCriteria(password) {
 
 fpNewPassword.addEventListener("input", () => updatePasswordCriteria(fpNewPassword.value));
 
-fpResetPasswordBtn.addEventListener("click", () => {
+// ------------------------------------------------------------------
+// BACKEND CONTRACT - POST /forgot-password/reset
+// Request:  { "email": "...", "otp": "123456", "newPassword": "..." }
+//           (otp is sent again here on purpose - the backend should
+//           re-check it's still valid/not expired, not just trust that
+//           step 2 already passed)
+// Response success: { "success": true }
+// Response failure: { "success": false, "message": "..." }
+// ------------------------------------------------------------------
+fpResetPasswordBtn.addEventListener("click", async () => {
   const isValid = updatePasswordCriteria(fpNewPassword.value);
 
   if (!isValid) {
@@ -266,10 +322,28 @@ fpResetPasswordBtn.addEventListener("click", () => {
     return;
   }
 
-  // TODO: real fetch() to Flask here to actually update the password in SQLite
-  console.log("Password reset submitted (not yet connected to a backend).");
+  try {
+    const response = await fetch("/forgot-password/reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: currentResetEmail,
+        otp: verifiedOtp,
+        newPassword: fpNewPassword.value,
+      }),
+    });
+    const result = await response.json();
 
-  goToStep(4);
+    if (result.success) {
+      goToStep(4);
+    } else {
+      alert(result.message || "Could not reset your password. Please start over.");
+      goToStep(1);
+    }
+  } catch (error) {
+    console.log("Could not reach the server.", error);
+    alert("Could not reach the server. Please try again in a moment.");
+  }
 });
 
 /* --------------------------------------------------------------------------
