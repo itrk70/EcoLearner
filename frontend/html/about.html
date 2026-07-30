@@ -160,7 +160,14 @@
     </div>
   </main>
 
-  <script src="../js/about.js"></script>
+  <script>
+    const aboutBackBtn = document.getElementById("aboutBackBtn");
+    if (aboutBackBtn) {
+      aboutBackBtn.addEventListener("click", () => {
+        window.history.back();
+      });
+    }
+  </script>
 </body>
 
 </html>
