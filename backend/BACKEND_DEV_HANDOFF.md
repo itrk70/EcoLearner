@@ -18,10 +18,12 @@ chat — the prompt references files you need to upload alongside it.
 | `frontend/html/signup.html` | Shows every Signup field and its exact `id` |
 | `frontend/js/signup.js` | **Most important frontend file.** Shows the EXACT request your `/signup` route must accept and the EXACT response shape it must return |
 | `frontend/html/login.html` | Shows the Login form fields |
-| `frontend/js/login.js` | Current login form behavior |
-| `frontend/js/forgot-password.js` | Shows the full OTP flow - search for `TODO` comments, each one marks exactly where your route plugs in |
-| `frontend/FORGOT_PASSWORD_BACKEND_README.md` | Explains the Forgot Password routes and security rules in plain language |
-| `frontend/js/quiz.js` | Search for "Hint" - shows where `spend_coins()` needs to plug in for real |
+| `frontend/js/login.js` | **Has a real fetch("/login") contract now** - shows the exact request/response shape expected |
+| `frontend/html/profile.html` | Shows every stat displayed on the Profile page |
+| `frontend/js/profile.js` | **Has a real fetch("/profile") contract now** - shows the exact response shape expected back |
+| `frontend/js/forgot-password.js` | **Has real fetch() contracts now** for all 3 routes (send-otp, verify-otp, reset) - exact shapes are in the code comments and in FORGOT_PASSWORD_BACKEND_README.md |
+| `frontend/FORGOT_PASSWORD_BACKEND_README.md` | Explains the Forgot Password routes, security rules, and email setup in plain language |
+| `frontend/js/quiz.js` | Search for `"use-hint"` and `"/profile"` - both real `fetch()` calls are already built in |
 
 ---
 
@@ -29,7 +31,7 @@ chat — the prompt references files you need to upload alongside it.
 
 **Phase 1: Signup + Login**
 - `POST /signup` → calls `db_helpers.create_user()`
-- `POST /login` → calls `db_helpers.get_user_by_email()` or `get_user_by_username()`, then checks the password with `werkzeug.security.check_password_hash()`
+- `POST /login` → request body is `{ "identifier": "...", "password": "..." }` (identifier = email OR username - try both when looking up the account), calls `db_helpers.get_user_by_email()`/`get_user_by_username()`, then checks the password with `werkzeug.security.check_password_hash()`. Response: `{ "success": true/false, "message": "..." }`. On success, start a Flask session - `/profile` and the Quiz hint route below both depend on that session existing.
 - `POST /logout`
 
 **Phase 2: Forgot Password**
@@ -41,7 +43,7 @@ chat — the prompt references files you need to upload alongside it.
 - `GET /profile` → just calls `db_helpers.get_profile_data(user_id)` - it already returns the exact shape `profile.js` needs
 
 **Phase 4: Quiz hint coin-spending**
-- A route the Quiz page calls when "Use Hint" is clicked → calls `db_helpers.spend_coins(user_id, 20)`, catches the `ValueError` if they don't have enough
+- `POST /quiz/use-hint` → calls `db_helpers.spend_coins(user_id, 20)`, catches the `ValueError` it raises if there aren't enough coins. Response success: `{ "success": true, "newCoinBalance": 80 }`. Response failure: `{ "success": false, "message": "Not enough coins" }`. This is also the route `quiz.js` calls now - and `openQuiz()` in that same file also calls `GET /profile` when the quiz opens, to show the user's real starting XP/Level/Coins instead of placeholder numbers.
 
 **Phase 5: Google/Microsoft Login** (last, or skip if time is short)
 - Uses `db_helpers.create_user()` with `google_id`/`microsoft_id` instead of a password
@@ -80,26 +82,33 @@ PHASE 1 - Signup and Login:
    (means username or email is already taken) and return
    { "success": false, "message": "..." } instead of crashing.
    On success return { "success": true, "message": "..." }.
-2. `/login` (POST) - look up the user, check their password with
-   werkzeug.security.check_password_hash(), start a Flask session if
-   correct.
+2. `/login` (POST) - request body is { "identifier": "...", "password": "..." }
+   where identifier could be an email OR a username - try looking up
+   both. Check the password with werkzeug.security.check_password_hash(),
+   start a Flask session if correct. Response shape is the same
+   { "success": true/false, "message": "..." } pattern as /signup.
 3. `/logout` (POST) - clears the session.
 
 PHASE 2 - Forgot Password:
 Please read FORGOT_PASSWORD_BACKEND_README.md (attached) first - it
 already explains what to build here in detail, including security
 rules like OTP expiry and never sending the correct OTP back to the
-frontend. Use set_otp(), clear_otp(), and update_password() from
-db_helpers.py for this.
+frontend, AND the real email account to send from. Use set_otp(),
+clear_otp(), and update_password() from db_helpers.py for this.
 
 PHASE 3 - Profile data:
 A `/profile` route (GET) that returns whatever get_profile_data()
-gives you, as JSON, for the logged-in user.
+gives you, as JSON, for the logged-in user (read from the Flask
+session, not a URL parameter - never trust the browser to tell you
+which user it is). This route is called by BOTH profile.js and
+quiz.js (quiz.js calls it once, when the quiz window opens, just to
+show real starting XP/Level/Coins).
 
 PHASE 4 - Quiz hint spending:
-A route the Quiz page can call when someone uses a hint, which calls
-spend_coins(user_id, 20) and handles the case where they don't have
-enough (catch the ValueError it raises).
+A `/quiz/use-hint` (POST) route - calls spend_coins(user_id, 20).
+On success return { "success": true, "newCoinBalance": <their new balance> }.
+If they don't have enough coins, spend_coins() raises a ValueError -
+catch it and return { "success": false, "message": "Not enough coins" }.
 
 PHASE 5 - Google/Microsoft Login (only after everything above works):
 Help me add "Sign in with Google" first (simpler than Microsoft), using
