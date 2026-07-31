@@ -46,7 +46,3 @@ Testing reports help:
 - Prepare the project for demonstration
 
 Every major prototype update should include a new testing report.
-
-**Maintained By**
-- M-E (Research & Desktop QA)
-- M-F (Content & Mobile QA)
