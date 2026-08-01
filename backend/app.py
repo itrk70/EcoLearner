@@ -3,32 +3,8 @@ app.py
 ======
 The Flask backend for EcoLearner.
 
-FOLDER CONTEXT (so you know where this file "lives"):
-
-    itrk70-ecolearner/
-    ├── index.html
-    ├── backend/
-    │   └── app.py            <-- YOU ARE HERE
-    ├── database/
-    │   ├── db_helpers.py
-    │   ├── schema.sql
-    │   └── ecolearner.db
-    └── frontend/
-        ├── css/
-        ├── js/
-        └── html/
-            ├── login.html
-            ├── signup.html
-            ├── profile.html
-            └── quiz.html
-
 Run this with:  python app.py   (from inside the backend/ folder)
 Then visit:     http://127.0.0.1:5000/
-
-See NOTES_FOR_PRESENTATION.md in this same folder for a plain-English
-explanation of every concept used here (routes, sessions, request.json,
-decorators, etc.) - written so you can study it and explain it in your
-SIH demo/presentation.
 """
 
 import os
