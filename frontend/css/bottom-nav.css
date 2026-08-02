@@ -1,0 +1,92 @@
+/* ==========================================================================
+   BOTTOM-NAV.CSS
+   Sticky bottom navigation bar - ONLY shown on mobile screens (<768px).
+   Items: Home, Learn, Challenges, Rewards, Profile.
+
+   ICON STATES:
+   - Inactive (not the current page): grayscale, via the .turn-gray class
+   - Active (current page): full green tint + a neon glow, via .is-current
+   Which item gets .is-current is decided automatically by bottom-nav.js
+   (compares each item's page name to the current URL) - nothing needs
+   to be hardcoded per page.
+   ========================================================================== */
+
+.bottom-nav {
+  display: none; /* shown only under 768px, see media query below */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+  z-index: 30; /* stays below the account panel (50) / its overlay (40) */
+  padding: 6px var(--space-sm);
+  padding-bottom: calc(6px + env(safe-area-inset-bottom)); /* respects iPhone home-bar area */
+}
+
+.bottom-nav__list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.bottom-nav__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+/* Exact class/definition as specified - default inactive state */
+.turn-gray {
+  filter: grayscale(100%);
+}
+
+.bottom-nav__item-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: color 0.3s ease;
+}
+
+/* Active state: full color + green tint + neon glow. This filter chain
+   works regardless of the source PNG's original colors - it flattens
+   the icon to a white silhouette first (brightness(0) invert(1)),
+   then tints it green, then adds a glowing drop-shadow (drop-shadow
+   follows the icon's actual alpha shape, unlike box-shadow which would
+   just be a rectangle). May need small tuning once the real PNGs are
+   in place and visible. */
+.bottom-nav__item.is-current .bottom-nav__icon {
+  filter:
+    brightness(0) invert(1)
+    sepia(1) saturate(6) hue-rotate(85deg) brightness(0.95) contrast(1.1)
+    drop-shadow(0 0 3px #22c55e)
+    drop-shadow(0 0 7px #22c55e);
+}
+
+.bottom-nav__item.is-current .bottom-nav__item-label {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* -------------------- MOBILE ONLY: SHOW THE BAR -------------------- */
+@media (max-width: 767px) {
+  .bottom-nav {
+    display: block;
+  }
+
+  body {
+    padding-bottom: 68px; /* stops page content hiding behind the fixed bar */
+  }
+}

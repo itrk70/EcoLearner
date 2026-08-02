@@ -1,0 +1,102 @@
+/* ==========================================================================
+   FOOTER.CSS
+   Shown on tablet/desktop only - hidden on mobile (<768px), where the
+   Bottom Nav takes over navigation instead (see bottom-nav.css).
+
+   LAYOUT: flat 4-column row (Brand | Explore | Account | About), all
+   siblings in ONE grid - not nested, not centered as a block. The
+   whole thing starts near the left edge with a comfortable margin and
+   stretches to fill the available width, instead of floating as a
+   fixed-width block centered in the middle of the page.
+   ========================================================================== */
+
+.site-footer {
+  /* Darker than the app's usual green, but still clearly green - not
+     black. Deliberately its own value rather than reusing
+     --color-primary-dark, since that's still too light for this. */
+  background: #0F2E17;
+  color: rgba(255, 255, 255, 0.85);
+  padding: var(--space-xl) var(--space-lg) var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.site-footer__inner {
+  width: 100%;
+  margin: 0; /* NOT centered - starts from the left */
+  padding-left: var(--space-md); /* just a comfortable breathing margin */
+  display: grid;
+  grid-template-columns: 1fr; /* single column on mobile-width footers, e.g. narrow tablet */
+  gap: var(--space-lg);
+}
+
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.site-footer__brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-white);
+}
+
+.site-footer__brand-logo .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.site-footer__brand-tagline {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 280px;
+}
+
+.site-footer__col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.site-footer__col a {
+  display: block;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 4px 0;
+}
+
+.site-footer__col a:hover {
+  color: var(--color-white);
+}
+
+.site-footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  padding-left: var(--space-md);
+  text-align: left; /* left-aligned to match everything above, not centered */
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* -------------------- TABLET+ (768px): the real 4-column flat row -------------------- */
+@media (min-width: 768px) {
+  .site-footer__inner {
+    /* All 4 sections as direct siblings in ONE row - Brand isn't
+       visually separated/nested from the other 3 anymore. */
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  }
+}
+
+/* -------------------- MOBILE: HIDDEN (bottom nav takes over instead) -------------------- */
+@media (max-width: 767px) {
+  .site-footer {
+    display: none;
+  }
+}
